@@ -1,4 +1,6 @@
-from app.Main import main
+# from app.Main import main
+# from app.Main import Command
+from app import Main
 import pytest
 
 # from prompt_toolkit.application import create_app_session
@@ -29,10 +31,15 @@ def test_main(mock_input, capsys):
     mock_input.send_text("exit\n")
 
     # _pt_app_session()
-    main()
+    Main.main()
     captured_output = capsys.readouterr()
 
     assert captured_output.out == "Hello: command not found\n"
+
+def test_echo_helper():
+    command = Main.Command("echo hello world")
+    result = Main.echo_helper(command)
+    assert result == "hello world"
 
 # ORIGINAL TEST
 # # TODO: Update this test as it will now fail when running pytest
