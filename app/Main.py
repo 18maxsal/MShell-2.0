@@ -11,7 +11,9 @@ class Command:
         self.is_redirected_append = is_redirected_append
         self.is_redirected_append_error = is_redirected_append_error
 
-    def string_parser(self):
+        self.sub_commands = [] # Only used when the command contains a pipeline symbol
+
+    def string_parser(self) -> list[str]:
         pass
 
     def find_redirects(self):
@@ -21,7 +23,7 @@ class Command:
         pass
 
 
-
+BUILT_INS = ["exit"]
 
 
 def main():
@@ -32,9 +34,12 @@ def main():
     )
 
 
+    # The main Read-Eval-Print-Loop (i.e. REPL)
     while True:
-        command = session.prompt("$ ")
-        print(f"Given command: {command}")
+        # command = session.prompt("$ ")
+        command = Command(session.prompt("$ "))
+        print(f"{command.command}: command not found")
+        # print(f"Given command: {command.command}")
         break
 
 
