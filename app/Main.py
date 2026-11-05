@@ -5,11 +5,20 @@ class Command:
 
     def __init__(self, command: str, is_redirected: bool = False, is_redirected_error: bool = False, 
                  is_redirected_append: bool = False, is_redirected_append_error: bool = False):
-        self.command = command
+        command = command.split(" ")
+        self.command = command[0]
+        self.args = command[1:]
         self.is_redirected = is_redirected
         self.is_redirected_error = is_redirected_error
         self.is_redirected_append = is_redirected_append
         self.is_redirected_append_error = is_redirected_append_error
+    # def __init__(self, command: str, is_redirected: bool = False, is_redirected_error: bool = False, 
+    #              is_redirected_append: bool = False, is_redirected_append_error: bool = False):
+    #     self.command = command
+    #     self.is_redirected = is_redirected
+    #     self.is_redirected_error = is_redirected_error
+    #     self.is_redirected_append = is_redirected_append
+    #     self.is_redirected_append_error = is_redirected_append_error
 
         self.sub_commands = [] # Only used when the command contains a pipeline symbol
 
@@ -23,7 +32,10 @@ class Command:
         pass
 
 
-BUILT_INS = ["exit"]
+BUILT_INS = ["exit", "echo"]
+
+def echo_helper(command: Command) -> str | None:
+    return " ".join(command.args).strip()
 
 
 def main():
@@ -38,9 +50,16 @@ def main():
     while True:
         # command = session.prompt("$ ")
         command = Command(session.prompt("$ "))
+        if command.command == "echo":
+            result = echo_helper(command)
+            print(result)
+        if command.command == "exit":
+            break
+        # print(type(command.command))
+        # print(f"command: {command.command}, args: {command.args}")
         print(f"{command.command}: command not found")
         # print(f"Given command: {command.command}")
-        break
+        # break
 
 
 if __name__ == "__main__":

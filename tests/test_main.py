@@ -13,17 +13,21 @@ def mock_input():
         with create_app_session(input=pipe_input, output=DummyOutput()):
             yield pipe_input
 
-@pytest.fixture(autouse=True, scope="function")
-def _pt_app_session():
-    with create_app_session():
-        yield
+
+# @pytest.fixture(autouse=True, scope="function")
+# def _pt_app_session():
+#     with create_app_session():
+#         yield
 
 
 
 
 # TODO: Update this test as it will now fail when running pytest
-def test_main(mock_input,capsys):
+def test_main(mock_input, capsys):
+    # mock_input.send_text("Hello\nexit\n")
     mock_input.send_text("Hello\n")
+    mock_input.send_text("exit\n")
+
     # _pt_app_session()
     main()
     captured_output = capsys.readouterr()
