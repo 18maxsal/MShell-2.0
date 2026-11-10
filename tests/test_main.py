@@ -24,9 +24,7 @@ import pytest
 
 
 
-# TODO: Update this test as it will now fail when running pytest
 def test_main(mock_input, capsys):
-    # mock_input.send_text("Hello\nexit\n")
     mock_input.send_text("Hello\n")
     mock_input.send_text("exit\n")
 
@@ -40,6 +38,11 @@ def test_echo_helper():
     command = Main.Command("echo hello world")
     result = Main.echo_helper(command)
     assert result == "hello world"
+
+def test_echo_helper2():
+    command = Main.Command("echo ")
+    result = Main.echo_helper(command)
+    assert result == ""
 
 # ORIGINAL TEST
 # # TODO: Update this test as it will now fail when running pytest
