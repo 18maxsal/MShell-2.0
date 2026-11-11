@@ -44,6 +44,16 @@ def test_echo_helper2():
     result = Main.echo_helper(command)
     assert result == ""
 
+def test_type_helper1():
+    command = Main.Command("type echo")
+    result = Main.type_helper(command)
+    assert result == "echo is a shell builtin"
+
+def test_type_helper2():
+    command = Main.Command("type someCommandHere")
+    result = Main.type_helper(command)
+    assert result == "someCommandHere: not found"
+
 # ORIGINAL TEST
 # # TODO: Update this test as it will now fail when running pytest
 # def test_main(capsys):

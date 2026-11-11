@@ -38,10 +38,14 @@ def echo_helper(command: Command) -> str | None:
     return " ".join(command.args).strip()
 
 def type_helper(command: Command) -> str | None:
+    
     if command.args[0] in BUILT_INS:
-        return f"{command.command} is a shell builtin"
+        return f"{command.args[0]} is a shell builtin"
     else:
-        return f"{command.command}: not found"
+
+
+
+        return f"{command.args[0]}: not found"
 
 def main():
     # print("Hello")
@@ -62,11 +66,11 @@ def main():
             result = type_helper(command)
             print(result)
         # if command.command == "exit":
-        else:
+        elif command.command == "exit":
             break
         # print(type(command.command))
         # print(f"command: {command.command}, args: {command.args}")
-        print(f"{command.args[0]}: command not found")
+        print(f"{command.command}: command not found")
         # print(f"Given command: {command.command}")
         # break
 
