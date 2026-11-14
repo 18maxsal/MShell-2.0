@@ -1,3 +1,4 @@
+import shutil
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
 
@@ -43,9 +44,11 @@ def type_helper(command: Command) -> str | None:
         return f"{command.args[0]} is a shell builtin"
     else:
 
-
-
-        return f"{command.args[0]}: not found"
+        is_path = shutil.which(command.args[0])
+        if is_path:
+            return f"{command.args[0]} is {is_path}"
+        else:
+            return f"{command.args[0]}: not found"
 
 def main():
     # print("Hello")
