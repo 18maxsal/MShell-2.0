@@ -77,3 +77,11 @@ def test_run_external_command2():
     result = Main.run_external_command(command)
 
     assert result == False
+
+
+def test_pwd_helper():
+    """
+    TODO: Update this test once change directory command is implemented
+    """
+    result = Main.pwd_helper()
+    assert result

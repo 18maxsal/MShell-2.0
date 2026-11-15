@@ -1,5 +1,6 @@
 import shutil
 import subprocess
+from pathlib import Path
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
 
@@ -27,7 +28,7 @@ class Command:
         pass
 
 
-BUILT_INS = ["exit", "echo", "type"]
+BUILT_INS = ["exit", "echo", "type", "pwd"]
 
 def echo_helper(command: Command) -> str | None:
     return " ".join(command.args).strip()
@@ -54,6 +55,10 @@ def run_external_command(command: Command) -> bool:
         subprocess.run([path, *command.args])
     return True
 
+
+def pwd_helper() -> str:
+    return Path.cwd()
+
 def main():
     # print("Hello")
     memory = InMemoryHistory()
@@ -71,6 +76,9 @@ def main():
             print(result)
         elif command.command == "type":
             result = type_helper(command)
+            print(result)
+        elif command.command == "pwd":
+            result = pwd_helper()
             print(result)
         # if command.command == "exit":
         elif command.command == "exit":
