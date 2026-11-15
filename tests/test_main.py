@@ -64,3 +64,16 @@ def test_type_helper3():
     command = Main.Command("type Python")
     result = Main.type_helper(command)
     assert result
+
+def test_run_external_command1(mock_input):
+    command = Main.Command("Python")
+    mock_input.send_text("exit()\n")
+    result = Main.run_external_command(command)
+
+    assert result == True
+
+def test_run_external_command2():
+    command = Main.Command("SomeCommandHere")
+    result = Main.run_external_command(command)
+
+    assert result == False

@@ -1,4 +1,5 @@
 import shutil
+import subprocess
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
 
@@ -13,13 +14,6 @@ class Command:
         self.is_redirected_error = is_redirected_error
         self.is_redirected_append = is_redirected_append
         self.is_redirected_append_error = is_redirected_append_error
-    # def __init__(self, command: str, is_redirected: bool = False, is_redirected_error: bool = False, 
-    #              is_redirected_append: bool = False, is_redirected_append_error: bool = False):
-    #     self.command = command
-    #     self.is_redirected = is_redirected
-    #     self.is_redirected_error = is_redirected_error
-    #     self.is_redirected_append = is_redirected_append
-    #     self.is_redirected_append_error = is_redirected_append_error
 
         self.sub_commands = [] # Only used when the command contains a pipeline symbol
 
@@ -50,6 +44,16 @@ def type_helper(command: Command) -> str | None:
         else:
             return f"{command.args[0]}: not found"
 
+def run_external_command(command: Command) -> bool:
+    path = shutil.which(command.command)
+
+    if not path:
+        return False
+
+    else:
+        subprocess.run([path, *command.args])
+    return True
+
 def main():
     # print("Hello")
     memory = InMemoryHistory()
@@ -73,7 +77,10 @@ def main():
             break
         # print(type(command.command))
         # print(f"command: {command.command}, args: {command.args}")
-        print(f"{command.command}: command not found")
+        else:
+            is_external = run_external_command(command)
+            if not is_external:
+                print(f"{command.command}: command not found")
         # print(f"Given command: {command.command}")
         # break
 
