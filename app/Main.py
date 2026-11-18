@@ -29,7 +29,7 @@ class Command:
         pass
 
 
-BUILT_INS = ["exit", "echo", "type", "pwd", "cd"]
+BUILT_INS = ["exit", "echo", "type", "pwd", "cd", "history"]
 
 def echo_helper(command: Command) -> str | None:
     return " ".join(command.args).strip()
@@ -78,6 +78,11 @@ def change_directory(command: Command) -> str | None:
 
     return
 
+def print_history(command: Command, memory: InMemoryHistory) -> None:
+    # print(memory.get_strings())
+    current_memory = memory.get_strings()
+    for i in range(len(current_memory)):
+        print(f"    {i + 1} {current_memory[i]}")
 
 
 def main():
@@ -104,6 +109,8 @@ def main():
         # if command.command == "exit":
         elif command.command == "cd":
             change_directory(command)
+        elif command.command == "history":
+            print_history(command, memory)
         elif command.command == "exit":
             break
         # print(type(command.command))

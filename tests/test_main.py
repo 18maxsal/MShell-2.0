@@ -123,3 +123,20 @@ def test_change_directory2(tmp_path, monkeypatch, capsys):
     captured_output = capsys.readouterr()
     assert captured_output.out == f"cd: {os.path.realpath(destination)}: No such file or directory\n"
     assert Path.cwd() == oringinal_directory
+
+
+def test_print_history1(capsys):
+    memory = Main.InMemoryHistory()
+    memory.append_string("echo Hello")
+    memory.append_string("type echo")
+    Main.print_history(Main.Command("history"), memory)
+    captured_output = capsys.readouterr()
+    assert captured_output.out == "    1 echo Hello\n    2 type echo\n"
+
+def test_print_history2(capsys):
+    memory = Main.InMemoryHistory()
+    memory.append_string("history")
+    Main.print_history(Main.Command("history"), memory)
+    captured_output = capsys.readouterr()
+    assert captured_output.out == "    1 history\n"
+
