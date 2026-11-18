@@ -126,17 +126,39 @@ def test_change_directory2(tmp_path, monkeypatch, capsys):
 
 
 def test_print_history1(capsys):
+    """
+    Test Case: Tests for correct output for when we print the full
+    history.
+    """
     memory = Main.InMemoryHistory()
     memory.append_string("echo Hello")
     memory.append_string("type echo")
+    memory.append_string("history")
     Main.print_history(Main.Command("history"), memory)
     captured_output = capsys.readouterr()
-    assert captured_output.out == "    1 echo Hello\n    2 type echo\n"
+    assert captured_output.out == "    1 echo Hello\n    2 type echo\n    3 history\n"
 
 def test_print_history2(capsys):
+    """
+    Test Case: Tests for correct output for when the only command 
+    is the history command.
+    """
     memory = Main.InMemoryHistory()
     memory.append_string("history")
     Main.print_history(Main.Command("history"), memory)
     captured_output = capsys.readouterr()
     assert captured_output.out == "    1 history\n"
+
+def test_print_history3(capsys):
+    """
+    Test Case: Tests for correct output for when we limit the 
+    amount of entries the print_history function prints.
+    """
+    memory = Main.InMemoryHistory()
+    memory.append_string("echo hello")
+    memory.append_string("echo goodbye")
+    memory.append_string("history 2")
+    Main.print_history(Main.Command("history 2"), memory)
+    captured_output = capsys.readouterr()
+    assert captured_output.out == "    2 echo goodbye\n    3 history 2\n"
 

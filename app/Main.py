@@ -79,10 +79,16 @@ def change_directory(command: Command) -> str | None:
     return
 
 def print_history(command: Command, memory: InMemoryHistory) -> None:
-    # print(memory.get_strings())
     current_memory = memory.get_strings()
-    for i in range(len(current_memory)):
-        print(f"    {i + 1} {current_memory[i]}")
+    if len(command.args) > 0:
+        start = len(current_memory) - int(command.args[0])
+        for i in range(start, len(current_memory)):
+            print(f"    {i + 1} {current_memory[i]}")
+
+    else:
+        for i in range(len(current_memory)):
+            print(f"    {i + 1} {current_memory[i]}")
+    
 
 
 def main():
