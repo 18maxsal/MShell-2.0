@@ -1,5 +1,6 @@
 import shutil
 import subprocess
+import os
 from pathlib import Path
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
@@ -28,7 +29,7 @@ class Command:
         pass
 
 
-BUILT_INS = ["exit", "echo", "type", "pwd"]
+BUILT_INS = ["exit", "echo", "type", "pwd", "cd"]
 
 def echo_helper(command: Command) -> str | None:
     return " ".join(command.args).strip()
@@ -59,6 +60,26 @@ def run_external_command(command: Command) -> bool:
 def pwd_helper() -> str:
     return Path.cwd()
 
+def change_directory(command: Command) -> str | None:
+
+    # Takes user to home directory
+    if command.args[0] == "~":
+        os.chdir(Path.home())
+
+    path = os.path.realpath(command.args[0])
+
+    # Handles absolute and relative paths
+    if os.path.exists(path):
+        os.chdir(path)
+
+    # Handles invalid input
+    else:
+        print(f"cd: {path}: No such file or directory")
+
+    return
+
+
+
 def main():
     # print("Hello")
     memory = InMemoryHistory()
@@ -81,6 +102,8 @@ def main():
             result = pwd_helper()
             print(result)
         # if command.command == "exit":
+        elif command.command == "cd":
+            change_directory(command)
         elif command.command == "exit":
             break
         # print(type(command.command))

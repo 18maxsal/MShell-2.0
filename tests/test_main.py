@@ -1,6 +1,8 @@
 # from app.Main import main
 # from app.Main import Command
 from app import Main
+from pathlib import Path
+import os
 import pytest
 
 def test_main(mock_input, capsys):
@@ -79,9 +81,45 @@ def test_run_external_command2():
     assert result == False
 
 
-def test_pwd_helper():
+def test_pwd_helper1():
     """
-    TODO: Update this test once change directory command is implemented
+    Test Case: Tests if a value (correct or not) is returned.
     """
     result = Main.pwd_helper()
     assert result
+
+def test_pwd_helper2(tmp_path, monkeypatch):
+    """
+    Test Case: Tests current working directory path is correct 
+    with expected input.
+    """
+    # path = tmp_path
+    monkeypatch.chdir(tmp_path)
+    result = Main.pwd_helper()
+    assert result == tmp_path
+
+def test_change_directory1(tmp_path, monkeypatch):
+    """
+    Test Case: Tests changing directories into an existing directory.
+    """
+    destination = tmp_path / "example"
+    destination.mkdir()
+
+    monkeypatch.chdir(tmp_path)
+    command = Main.Command(f"cd {str(destination)}")
+    Main.change_directory(command)
+
+    assert Path.cwd() == destination.resolve()
+
+def test_change_directory2(tmp_path, monkeypatch, capsys):
+    """
+    Test Case: Tests changing into a non-existent directory.
+    """
+    monkeypatch.chdir(tmp_path)
+    oringinal_directory = Path.cwd()
+    destination = str(tmp_path / "someDirectoryHere")
+    command = Main.Command(f"cd {destination}")
+    Main.change_directory(command)
+    captured_output = capsys.readouterr()
+    assert captured_output.out == f"cd: {os.path.realpath(destination)}: No such file or directory\n"
+    assert Path.cwd() == oringinal_directory
